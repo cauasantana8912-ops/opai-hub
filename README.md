@@ -1,10 +1,15 @@
-# Opai Hub
+# Opai Hub — versão atualizada
 
-Interface responsiva inspirada no layout de streaming fornecido como referência.
+- Layout responsivo separado para PC e mobile.
+- Tela de login/cadastro local.
+- Área de administração visível apenas para o perfil `admin` neste protótipo.
+- Catálogo de informações de animes via AniList e séries via TVMaze.
+- Página de detalhes com temporadas/episódios.
+- Progresso local e “Continuar assistindo”.
+- Marcação automática de episódio concluído quando o usuário inicia o último episódio.
+- Detecção de links oficiais no catálogo e botão Assistir que abre a fonte oficial.
+- Não inclui players/streams não autorizados.
 
-- PC: sidebar, hero, painel Em Exibição e grades de cards.
-- Mobile: navegação inferior e layout próprio para telas pequenas.
-- Catálogo informativo: AniList (animes) e TVMaze (séries).
-- Login/demo local e área administrativa visual.
+**Login de demonstração:** `admin` / `cauhub123`
 
-> O projeto não inclui fontes não autorizadas de streaming/download. Integre somente players e conteúdos para os quais você tenha permissão.
+> Para autenticação real e controle de administrador seguro, use backend; GitHub Pages não deve armazenar segredos.

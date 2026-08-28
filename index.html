@@ -2,112 +2,135 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#090a0f">
 <title>Opai Hub</title>
-<link rel="stylesheet" href="styles.css?v=10">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div id="auth" class="auth-screen">
+<div id="auth" class="auth">
   <div class="auth-card">
-    <div class="brand">OPAI <span>HUB</span></div>
+    <div class="brand">OPAI <b>HUB</b></div>
     <div id="loginBox">
+      <span class="eyebrow">SEU HUB. SEU MUNDO.</span>
       <h1>Entrar</h1><p>Acesse sua conta Opai Hub.</p>
       <input id="loginUser" autocomplete="username" placeholder="Usuário">
       <input id="loginPass" autocomplete="current-password" type="password" placeholder="Senha">
-      <button class="primary wide" onclick="login()">Entrar</button>
-      <button class="text-btn" onclick="toggleAuth()">Criar conta</button>
-      <div class="demo-note">Conta demo: <b>admin</b> / <b>cauhub123</b></div>
+      <button class="primary full" id="loginBtn">Entrar</button>
+      <button class="link" id="showSignup">Criar conta</button>
+      <p class="login-help">Conta de demonstração: <b>admin</b> / <b>cauhub123</b></p>
     </div>
     <div id="signupBox" hidden>
-      <h1>Criar conta</h1><p>Crie uma conta local para testar o projeto.</p>
+      <span class="eyebrow">CRIAR PERFIL</span>
+      <h1>Nova conta</h1><p>Crie um perfil local neste navegador.</p>
       <input id="signUser" autocomplete="username" placeholder="Usuário">
       <input id="signPass" autocomplete="new-password" type="password" placeholder="Senha">
-      <button class="primary wide" onclick="signup()">Cadastrar</button>
-      <button class="text-btn" onclick="toggleAuth()">Já tenho conta</button>
+      <button class="primary full" id="signupBtn">Cadastrar</button>
+      <button class="link" id="showLogin">Já tenho conta</button>
     </div>
+    <div id="authMsg" class="auth-msg" aria-live="polite"></div>
   </div>
 </div>
 
 <div id="site" hidden>
   <header class="topbar">
-    <div class="brand">OPAI <span>HUB</span></div>
-    <button class="menu-btn" aria-label="Menu">☰</button>
-    <label class="search"><span>⌕</span><input id="search" placeholder="Buscar animes, séries..."></label>
-    <button class="top-action" onclick="showRandom()">⤨ <span>Aleatório</span></button>
-    <button class="icon-btn" onclick="openSettings()" aria-label="Configurações">⚙</button>
-    <button class="profile" onclick="toggleProfile()"><span class="avatar">◉</span><span id="profileName">Admin</span>⌄</button>
-    <div id="profileMenu" class="profile-menu" hidden>
-      <button onclick="showSection('home');toggleProfile()">Início</button>
-      <button onclick="openSettings();toggleProfile()">Configurações</button>
-      <button onclick="logout()">Sair</button>
-    </div>
+    <button class="icon-btn mobile-menu" id="menuBtn">☰</button>
+    <div class="brand">OPAI <b>HUB</b></div>
+    <div class="search"><span>⌕</span><input id="search" placeholder="Buscar animes, séries..."></div>
+    <button class="top-action" id="randomBtn">⤨ <span>Aleatório</span></button>
+    <button class="icon-btn" id="settingsBtn">⚙</button>
+    <button class="icon-btn" id="logoutBtn">⇥</button>
+    <button class="avatar" id="profileBtn">OH</button>
   </header>
 
-  <div class="app-shell">
-    <aside class="sidebar">
+  <div class="layout">
+    <aside id="sidebar">
       <nav>
-        <button class="nav active" data-section="home" onclick="showSection('home')">⌂ <span>Início</span></button>
-        <button class="nav" data-section="anime" onclick="showSection('anime')">▣ <span>Animes</span></button>
-        <button class="nav" data-section="series" onclick="showSection('series')">▤ <span>Séries</span></button>
-        <button class="nav" data-section="offline" onclick="showSection('offline')">⇩ <span>Offline</span></button>
-        <button class="nav" data-section="trending" onclick="showSection('trending')">🔥 <span>Em Alta</span></button>
-        <button class="nav" data-section="new" onclick="showSection('new')">▦ <span>Novos Episódios</span></button>
-        <button class="nav" data-section="calendar" onclick="showSection('calendar')">□ <span>Calendário</span></button>
-        <button class="nav" data-section="lists" onclick="showSection('lists')">☷ <span>Listas</span></button>
+        <button class="nav active" data-section="home">⌂ <span>Início</span></button>
+        <button class="nav" data-section="anime">◈ <span>Animes</span></button>
+        <button class="nav" data-section="series">▣ <span>Séries</span></button>
+        <button class="nav" data-section="trending">🔥 <span>Em Alta</span></button>
+        <button class="nav" data-section="new">▣ <span>Novos Episódios</span></button>
+        <button class="nav" data-section="history">◷ <span>Histórico</span></button>
+        <button class="nav" data-section="favorites">♡ <span>Favoritos</span></button>
+        <button class="nav" data-section="offline">⇩ <span>Offline</span></button>
+        <button class="nav admin-only" id="adminNav" data-section="admin" hidden>♛ <span>Administração</span></button>
       </nav>
-      <div class="side-title">Sua Biblioteca</div>
-      <nav>
-        <button class="nav" onclick="showSection('history')">◷ <span>Histórico</span></button>
-        <button class="nav" onclick="showSection('later')">◴ <span>Assistir mais tarde</span></button>
-        <button class="nav" onclick="showSection('favorites')">♡ <span>Favoritos</span></button>
-      </nav>
-      <div class="sidebar-user"><span class="avatar">◉</span><div><b id="sideUser">Opai Admin</b><small id="sideRole">ADMIN</small></div><span>⌄</span></div>
-      <button id="adminNav" class="admin-nav" hidden onclick="showSection('admin')">♛ Administração</button>
+      <div class="side-note">
+        <b>OPAI HUB</b>
+        <p>Catálogo automático com informações públicas.</p>
+        <small>Reprodução: somente fontes autorizadas.</small>
+      </div>
     </aside>
 
-    <main class="content">
+    <main id="main">
       <section id="home" class="section">
-        <div class="home-grid">
-          <div class="hero" id="hero">
-            <div class="hero-overlay"></div>
-            <div class="hero-content">
-              <span class="pill accent">EM EXIBIÇÃO</span>
-              <h1 id="heroTitle">Carregando...</h1>
-              <div class="hero-meta"><span id="heroYear">—</span><span id="heroAge">16</span><span id="heroSeasons">— Temporadas</span><span>HD</span></div>
-              <p id="heroDesc">Carregando catálogo...</p>
-              <div class="tags" id="heroTags"></div>
-              <div class="hero-actions"><button class="primary" onclick="openCurrent()">▶ Assistir agora</button><button class="secondary" onclick="addCurrent()">＋ Minha Lista</button></div>
-            </div>
-            <div class="hero-dots"><i class="active"></i><i></i><i></i><i></i></div>
-          </div>
-          <aside class="airing">
-            <div class="section-head"><h3>EM EXIBIÇÃO</h3><button onclick="showSection('anime')">Ver todos</button></div>
-            <div id="airingList"></div>
-          </aside>
+        <div id="continueSection" class="section-block" hidden>
+          <div class="section-title"><h2>▣ Continuar assistindo</h2><button class="text-btn" id="clearContinue">Limpar</button></div>
+          <div id="continueCards" class="cards horizontal"></div>
         </div>
-        <section><div class="section-head"><h2>🔥 Em Alta</h2><button onclick="showSection('trending')">Ver todos</button></div><div id="popular" class="cards"></div></section>
-        <section><div class="section-head"><h2>▣ Novos Episódios</h2><button onclick="showSection('new')">Ver todos</button></div><div id="newCards" class="cards"></div></section>
-        <section><div class="section-head"><h2>★ Séries Populares</h2><button onclick="showSection('series')">Ver todos</button></div><div id="seriesHome" class="cards"></div></section>
+
+        <div class="hero" id="hero">
+          <div class="hero-content">
+            <span class="pill">EM EXIBIÇÃO</span>
+            <h1 id="heroTitle">Carregando...</h1>
+            <div id="heroMeta" class="meta"></div>
+            <p id="heroDesc"></p>
+            <div class="hero-actions">
+              <button class="primary" id="heroWatch">▶ Assistir</button>
+              <button class="secondary" id="heroList">＋ Minha Lista</button>
+            </div>
+            <small class="verified">♧ Fonte de reprodução: somente conteúdo autorizado</small>
+          </div>
+        </div>
+
+        <div class="section-block"><div class="section-title"><h2>🔥 Em Alta</h2><button class="text-btn" data-more="anime">Ver todos</button></div><div id="popular" class="cards"></div></div>
+        <div class="section-block"><div class="section-title"><h2>▣ Novos Episódios</h2><button class="text-btn" data-more="new">Ver todos</button></div><div id="new" class="cards"></div></div>
+        <div class="section-block"><div class="section-title"><h2>★ Séries Populares</h2><button class="text-btn" data-more="series">Ver todos</button></div><div id="seriesHome" class="cards"></div></div>
       </section>
 
-      <section id="anime" class="section" hidden><div class="page-title"><h1>Animes</h1><p>Catálogo atualizado automaticamente por fonte pública de informações.</p><div id="catalogStatus" class="catalog-status">Carregando fontes...</div></div><div id="animeAll" class="cards large"></div></section>
-      <section id="series" class="section" hidden><div class="page-title"><h1>Séries</h1><p>Informações de séries carregadas automaticamente de fonte pública.</p></div><div id="seriesAll" class="cards large"></div></section>
-      <section id="trending" class="section" hidden><div class="page-title"><h1>🔥 Em Alta</h1></div><div id="trendingAll" class="cards large"></div></section>
-      <section id="new" class="section" hidden><div class="page-title"><h1>▣ Novos Episódios</h1></div><div id="newAll" class="cards large"></div></section>
-      <section id="offline" class="section" hidden><div class="page-title"><h1>⇩ Offline</h1><p>Área preparada para conteúdos autorizados disponibilizados pelo próprio serviço.</p></div><div class="empty">Nenhum conteúdo salvo offline.</div></section>
-      <section id="calendar" class="section" hidden><div class="page-title"><h1>Calendário</h1></div><div class="empty">O calendário de lançamentos será exibido aqui quando os dados estiverem disponíveis.</div></section>
-      <section id="lists" class="section" hidden><div class="page-title"><h1>Listas</h1></div><div class="empty">Crie e organize suas listas pessoais.</div></section>
-      <section id="history" class="section" hidden><div class="page-title"><h1>Histórico</h1></div><div class="empty">Seu histórico aparecerá aqui.</div></section>
-      <section id="later" class="section" hidden><div class="page-title"><h1>Assistir mais tarde</h1></div><div class="empty">Você ainda não adicionou títulos.</div></section>
-      <section id="favorites" class="section" hidden><div class="page-title"><h1>Favoritos</h1></div><div class="empty">Seus favoritos aparecerão aqui.</div></section>
-      <section id="admin" class="section" hidden><div class="page-title"><h1>♛ Administração</h1><p>Visível somente para a conta administradora neste protótipo.</p></div><div class="admin-grid"><div><b>Usuário</b><strong id="adminUser">—</strong></div><div><b>Contas</b><strong id="accountCount">—</strong></div><div><b>Catálogo</b><strong>Automático</strong></div></div><div class="notice">A proteção de administrador no GitHub Pages é apenas do lado do navegador. Para segurança real, use autenticação e permissões em um backend.</div></section>
+      <section id="anime" class="section" hidden><div class="page-heading"><h1>Animes</h1><span id="animeCount"></span></div><div id="animeAll" class="cards"></div></section>
+      <section id="series" class="section" hidden><div class="page-heading"><h1>Séries</h1><span id="seriesCount"></span></div><div id="seriesAll" class="cards"></div></section>
+      <section id="trending" class="section" hidden><div class="page-heading"><h1>🔥 Em Alta</h1></div><div id="trendingAll" class="cards"></div></section>
+      <section id="new" class="section" hidden><div class="page-heading"><h1>▣ Novos Episódios</h1></div><div id="newAll" class="cards"></div></section>
+      <section id="history" class="section" hidden><div class="page-heading"><h1>Histórico</h1></div><div id="historyAll" class="cards"></div></section>
+      <section id="favorites" class="section" hidden><div class="page-heading"><h1>♡ Favoritos</h1></div><div id="favoritesAll" class="cards"></div></section>
+      <section id="offline" class="section" hidden><div class="page-heading"><h1>⇩ Offline</h1></div><div class="empty">Conteúdo offline depende de download disponibilizado pelo próprio serviço oficial. O Opai Hub não baixa nem redistribui vídeos protegidos.</div></section>
+      <section id="admin" class="section" hidden>
+        <div class="page-heading"><h1>♛ Administração</h1></div>
+        <div class="admin-grid"><div><b>Conta</b><span id="adminUser"></span></div><div><b>Perfis locais</b><span id="accountCount"></span></div><div><b>Catálogo</b><span>Atualização automática</span></div></div>
+        <div class="empty"><b>Área do administrador</b><p>Esta área fica visível apenas para o perfil local marcado como administrador. Para segurança real em produção, o controle de acesso deve ficar em um backend — o GitHub Pages sozinho não protege segredos.</p></div>
+      </section>
     </main>
   </div>
-  <nav class="mobile-nav"><button class="active" onclick="showSection('home')">⌂<small>Início</small></button><button onclick="showSection('anime')">⌕<small>Explorar</small></button><button onclick="showSection('offline')">▣<small>Biblioteca</small></button><button onclick="openSettings()">⚙<small>Perfil</small></button></nav>
+
+  <nav class="mobile-bottom">
+    <button data-section="home">⌂<small>Início</small></button>
+    <button data-section="anime">◈<small>Animes</small></button>
+    <button data-section="series">▣<small>Séries</small></button>
+    <button data-section="favorites">♡<small>Lista</small></button>
+    <button data-section="history">◷<small>Histórico</small></button>
+  </nav>
 </div>
 
-<dialog id="details"><button class="close" onclick="details.close()">×</button><div id="detailBody"></div></dialog>
-<dialog id="settings"><button class="close" onclick="settings.close()">×</button><h2>⚙ Configurações</h2><label>Tema<select><option>Opai Roxo</option><option>Escuro</option></select></label><label>Idioma<select><option>Português</option></select></label><button class="primary" onclick="settings.close()">Salvar</button></dialog>
-<script src="app.js?v=10"></script>
-</body></html>
+<dialog id="details">
+  <button class="dialog-close" id="closeDetails">×</button>
+  <div id="detailBody"></div>
+</dialog>
+
+<dialog id="settings">
+  <button class="dialog-close" id="closeSettings">×</button>
+  <h2>⚙ Configurações</h2>
+  <label class="setting-row">Tema
+    <select id="themeSelect"><option value="dark">Opai Roxo</option><option value="midnight">Midnight</option></select>
+  </label>
+  <label class="setting-row">Interface
+    <select id="densitySelect"><option value="comfortable">Confortável</option><option value="compact">Compacta</option></select>
+  </label>
+  <button class="primary" id="saveSettings">Salvar</button>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>

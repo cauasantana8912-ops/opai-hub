@@ -1,1 +1,9 @@
-{"name":"Opai Hub","short_name":"Opai Hub","start_url":"./","display":"standalone","background_color":"#07080d","theme_color":"#090a0f","lang":"pt-BR"}
+{
+  "name":"Opai Hub",
+  "short_name":"Opai Hub",
+  "start_url":".",
+  "display":"standalone",
+  "background_color":"#07090e",
+  "theme_color":"#090a0f",
+  "lang":"pt-BR"
+}
