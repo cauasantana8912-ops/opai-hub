@@ -4,8 +4,8 @@
 <title>Opai Hub</title><link rel="stylesheet" href="styles.css"></head>
 <body>
 <div id="auth" class="auth"><div class="auth-card"><div class="logo">OPAI <b>HUB</b></div>
-<div id="loginBox"><h1>Entrar</h1><p>Acesse sua conta Opai Hub.</p><input id="loginUser" placeholder="Usuário"><input id="loginPass" type="password" placeholder="Senha"><button class="primary" onclick="login()">Entrar</button><button class="link" onclick="toggleAuth()">Criar conta</button></div>
-<div id="signupBox" hidden><h1>Criar conta</h1><input id="signUser" placeholder="Usuário"><input id="signPass" type="password" placeholder="Senha"><button class="primary" onclick="signup()">Cadastrar</button><button class="link" onclick="toggleAuth()">Já tenho conta</button></div>
+<div id="loginBox"><h1>Entrar</h1><p>Acesse sua conta Opai Hub.</p><input id="loginUser" autocomplete="username" placeholder="Usuário"><input id="loginPass" autocomplete="current-password" type="password" placeholder="Senha"><button class="primary" onclick="login()">Entrar</button><button class="link" onclick="toggleAuth()">Criar conta</button></div>
+<div id="signupBox" hidden><h1>Criar conta</h1><input id="signUser" autocomplete="username" placeholder="Usuário"><input id="signPass" autocomplete="new-password" type="password" placeholder="Senha"><button class="primary" onclick="signup()">Cadastrar</button><button class="link" onclick="toggleAuth()">Já tenho conta</button></div>
 </div></div>
 <div id="site" hidden>
 <header><div class="logo">OPAI <b>HUB</b></div><div class="search"><input id="search" placeholder="Buscar animes e séries..."></div><button onclick="openSettings()">⚙️</button><button onclick="logout()">Sair</button></header>
