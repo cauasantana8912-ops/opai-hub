@@ -86,13 +86,13 @@
             <div id="airingList"></div>
           </aside>
         </div>
-        <section><div class="section-head"><h2>🔥 Em Alta</h2><button>Ver todos</button></div><div id="popular" class="cards"></div></section>
-        <section><div class="section-head"><h2>▣ Novos Episódios</h2><button>Ver todos</button></div><div id="newCards" class="cards"></div></section>
-        <section><div class="section-head"><h2>★ Séries Populares</h2><button>Ver todos</button></div><div id="seriesHome" class="cards"></div></section>
+        <section><div class="section-head"><h2>🔥 Em Alta</h2><button onclick="showSection('trending')">Ver todos</button></div><div id="popular" class="cards"></div></section>
+        <section><div class="section-head"><h2>▣ Novos Episódios</h2><button onclick="showSection('new')">Ver todos</button></div><div id="newCards" class="cards"></div></section>
+        <section><div class="section-head"><h2>★ Séries Populares</h2><button onclick="showSection('series')">Ver todos</button></div><div id="seriesHome" class="cards"></div></section>
       </section>
 
-      <section id="anime" class="section" hidden><div class="page-title"><h1>Animes</h1><p>Catálogo atualizado automaticamente.</p></div><div id="animeAll" class="cards large"></div></section>
-      <section id="series" class="section" hidden><div class="page-title"><h1>Séries</h1><p>Informações de séries carregadas de fonte pública.</p></div><div id="seriesAll" class="cards large"></div></section>
+      <section id="anime" class="section" hidden><div class="page-title"><h1>Animes</h1><p>Catálogo atualizado automaticamente por fonte pública de informações.</p><div id="catalogStatus" class="catalog-status">Carregando fontes...</div></div><div id="animeAll" class="cards large"></div></section>
+      <section id="series" class="section" hidden><div class="page-title"><h1>Séries</h1><p>Informações de séries carregadas automaticamente de fonte pública.</p></div><div id="seriesAll" class="cards large"></div></section>
       <section id="trending" class="section" hidden><div class="page-title"><h1>🔥 Em Alta</h1></div><div id="trendingAll" class="cards large"></div></section>
       <section id="new" class="section" hidden><div class="page-title"><h1>▣ Novos Episódios</h1></div><div id="newAll" class="cards large"></div></section>
       <section id="offline" class="section" hidden><div class="page-title"><h1>⇩ Offline</h1><p>Área preparada para conteúdos autorizados disponibilizados pelo próprio serviço.</p></div><div class="empty">Nenhum conteúdo salvo offline.</div></section>
