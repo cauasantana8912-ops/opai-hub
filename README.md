@@ -17,3 +17,6 @@ Projeto estático do Opai Hub, focado em **Animes e Séries**, com experiências
 Envie o conteúdo desta pasta para a raiz do repositório e publique pela branch `main` em `/(root)`.
 
 > A autenticação deste projeto é apenas uma demonstração no navegador. Para produção, use backend seguro e nunca armazene senhas reais em `localStorage`.
+
+
+Versão corrigida: PC/mobile com estilos incorporados e cache atualizado (v4).

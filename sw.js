@@ -1,4 +1,4 @@
-const CACHE='opai-hub-v3';
+const CACHE='opai-hub-v4';
 const ASSETS=['./','./index.html','./styles.css','./app.js','./manifest.webmanifest','./assets/opai-hub-brand.png'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));
