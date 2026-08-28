@@ -1,4 +1,12 @@
-# Opai Hub v2 — login corrigido
-Correção da inicialização do login, cadastro, sessão e logout.
-Conta administrativa de demonstração: admin / cauhub123.
-Importante: GitHub Pages é hospedagem estática; esta autenticação é local/demonstrativa e não deve ser usada para proteger dados sensíveis.
+# Opai Hub
+
+Site estático para GitHub Pages.
+
+## Publicação
+Use a branch `main` e a pasta `/ (root)` em Settings → Pages.
+
+## Login de demonstração
+Usuário: `admin`
+Senha: `cauhub123`
+
+O login é local (localStorage), portanto não é uma autenticação segura para produção.

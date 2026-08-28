@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="pt-BR"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Opai Hub</title><link rel="stylesheet" href="styles.css"></head>
+<title>Opai Hub</title><link rel="stylesheet" href="styles.css?v=4"></head>
 <body>
 <div id="auth" class="auth"><div class="auth-card"><div class="logo">OPAI <b>HUB</b></div>
 <div id="loginBox"><h1>Entrar</h1><p>Acesse sua conta Opai Hub.</p><input id="loginUser" autocomplete="username" placeholder="Usuário"><input id="loginPass" autocomplete="current-password" type="password" placeholder="Senha"><button class="primary" onclick="login()">Entrar</button><button class="link" onclick="toggleAuth()">Criar conta</button></div>
@@ -10,7 +10,7 @@
 <div id="site" hidden>
 <header><div class="logo">OPAI <b>HUB</b></div><div class="search"><input id="search" placeholder="Buscar animes e séries..."></div><button onclick="openSettings()">⚙️</button><button onclick="logout()">Sair</button></header>
 <div class="layout"><aside><button class="nav active" onclick="showSection('home')">⌂ Início</button><button class="nav" onclick="showSection('anime')">◈ Animes</button><button class="nav" onclick="showSection('series')">▣ Séries</button><button class="nav" onclick="showSection('offline')">⇩ Offline</button><button class="nav" onclick="showSection('admin')" id="adminNav" hidden>👑 Administração</button></aside>
-<main><section id="home" class="section"><div class="hero"><div><small>OPAI HUB • EM ALTA</small><h1 id="heroTitle">Carregando...</h1><p id="heroDesc"></p><button class="primary" onclick="openCurrent()">▶ Ver detalhes</button></div></div><h2>🔥 Em Alta</h2><div id="popular" class="cards"></div><h2>🆕 Novos episódios</h2><div id="new" class="cards"></div><h2>📺 Séries</h2><div id="series" class="cards"></div></section>
+<main><section id="home" class="section"><div class="hero"><div><small>OPAI HUB • EM ALTA</small><h1 id="heroTitle">Carregando...</h1><p id="heroDesc"></p><button class="primary" onclick="openCurrent()">▶ Ver detalhes</button></div></div><h2>🔥 Em Alta</h2><div id="popular" class="cards"></div><h2>🆕 Novos episódios</h2><div id="new" class="cards"></div><h2>📺 Séries</h2><div id="seriesHome" class="cards"></div></section>
 <section id="anime" class="section" hidden><h1>Animes</h1><div id="animeAll" class="cards"></div></section>
 <section id="seriesPage" class="section" hidden><h1>Séries</h1><div id="seriesAll" class="cards"></div></section>
 <section id="offline" class="section" hidden><h1>Offline</h1><div class="empty">Seus conteúdos autorizados salvos para acesso offline aparecerão aqui.</div></section>
@@ -18,4 +18,4 @@
 </main></div></div>
 <dialog id="details"><button class="x" onclick="details.close()">×</button><div id="detailBody"></div></dialog>
 <dialog id="settings"><button class="x" onclick="settings.close()">×</button><h2>⚙️ Configurações</h2><label>Tema <select><option>Opai Roxo</option><option>Escuro</option></select></label><label>Idioma <select><option>Português</option></select></label><button class="primary" onclick="settings.close()">Salvar</button></dialog>
-<script src="app.js"></script></body></html>
+<script src="app.js?v=4"></script></body></html>
