@@ -27,21 +27,27 @@ function signup(){
   $("loginUser").value=u;$("loginPass").value=p;toggleAuth(false);msg("Conta criada. Agora clique em Entrar.")
 }
 function login(){
-  const u=$("loginUser")?.value.trim()||"", p=$("loginPass")?.value||"";
-  if(!u||!p)return msg("Digite usuário e senha.");
-  const list=ensureAdmin();
-  let x=list.find(a=>String(a.u||"").trim().toLowerCase()===u.toLowerCase()&&String(a.p??"")===p);
-  // Conta administrativa de demonstração: funciona mesmo se o localStorage antigo estiver inconsistente.
-  if(!x && u.toLowerCase()==="admin" && p==="cauhub123"){
-    x={u:"admin",p:"cauhub123",admin:true};
-    const i=list.findIndex(a=>String(a.u||"").trim().toLowerCase()==="admin");
-    if(i>=0) list[i]=x; else list.unshift(x);
-    localStorage.setItem("opaiAccounts",JSON.stringify(list));
+  const u=(document.getElementById("loginUser")?.value||"").trim();
+  const p=document.getElementById("loginPass")?.value||"";
+  if(!u||!p){ msg("Digite usuário e senha."); return false; }
+
+  // Administrador de demonstração: validado diretamente, sem depender do localStorage.
+  if(u.toLowerCase()==="admin" && p==="cauhub123"){
+    user={u:"admin",p:"cauhub123",admin:true};
+    try{ localStorage.setItem("opaiAccounts", JSON.stringify([user])); }catch(e){}
+    try{ localStorage.setItem("opaiSession", "admin"); }catch(e){ try{ sessionStorage.setItem("opaiSession", "admin"); }catch(_){} }
+    showSite();
+    return false;
   }
-  if(!x)return msg("Usuário ou senha incorretos.");
+
+  let list=[];
+  try{ list=ensureAdmin(); }catch(e){ list=[]; }
+  const x=list.find(a=>String(a.u||"").trim().toLowerCase()===u.toLowerCase() && String(a.p??"")===p);
+  if(!x){ msg("Usuário ou senha incorretos."); return false; }
   user=x;
-  try{localStorage.setItem("opaiSession",x.u)}catch(e){sessionStorage.setItem("opaiSession",x.u)}
+  try{localStorage.setItem("opaiSession",x.u)}catch(e){try{sessionStorage.setItem("opaiSession",x.u)}catch(_) {}}
   showSite();
+  return false;
 }
 function logout(){localStorage.removeItem("opaiSession");location.reload()}
 function showSite(){
