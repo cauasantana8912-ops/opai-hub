@@ -9,7 +9,14 @@ const title=x=>x?.title?.english||x?.title?.romaji||x?.name||"Sem título";
 const poster=x=>x?.coverImage?.extraLarge||x?.coverImage?.large||x?.image?.original||x?.image?.medium||"https://placehold.co/400x600/11141b/cb9cff?text=OPAI+HUB";
 
 function accounts(){try{return JSON.parse(localStorage.getItem("opaiAccounts")||"[]")}catch{return[]}}
-function ensureAdmin(){let a=accounts();if(!a.some(x=>x.u==="admin")){a.unshift({u:"admin",p:"cauhub123",admin:true});localStorage.setItem("opaiAccounts",JSON.stringify(a))}return a}
+function ensureAdmin(){
+  let a=accounts();
+  const i=a.findIndex(x=>String(x.u||"").toLowerCase()==="admin");
+  if(i<0) a.unshift({u:"admin",p:"cauhub123",admin:true});
+  else { a[i].u="admin"; a[i].p="cauhub123"; a[i].admin=true; }
+  localStorage.setItem("opaiAccounts",JSON.stringify(a));
+  return a;
+}
 function msg(t){$("authMsg").textContent=t||""}
 function toggleAuth(sign){$("loginBox").hidden=sign;$("signupBox").hidden=!sign;msg("")}
 function signup(){
@@ -22,9 +29,9 @@ function signup(){
 function login(){
   const u=$("loginUser").value.trim(),p=$("loginPass").value;
   if(!u||!p)return msg("Digite usuário e senha.");
-  const x=ensureAdmin().find(a=>a.u===u&&a.p===p);
-  if(!x)return msg("Usuário ou senha incorretos.");
-  user=x;localStorage.setItem("opaiSession",u);showSite()
+  const x=ensureAdmin().find(a=>String(a.u||"").toLowerCase()===u.toLowerCase()&&String(a.p||"")===p);
+  if(!x)return msg("Usuário ou senha incorretos. Para testar: admin / cauhub123");
+  user=x;localStorage.setItem("opaiSession",x.u);showSite()
 }
 function logout(){localStorage.removeItem("opaiSession");location.reload()}
 function showSite(){
