@@ -1,12 +1,10 @@
 # Opai Hub
 
-Site estático para GitHub Pages.
+Interface responsiva inspirada no layout de streaming fornecido como referência.
 
-## Publicação
-Use a branch `main` e a pasta `/ (root)` em Settings → Pages.
+- PC: sidebar, hero, painel Em Exibição e grades de cards.
+- Mobile: navegação inferior e layout próprio para telas pequenas.
+- Catálogo informativo: AniList (animes) e TVMaze (séries).
+- Login/demo local e área administrativa visual.
 
-## Login de demonstração
-Usuário: `admin`
-Senha: `cauhub123`
-
-O login é local (localStorage), portanto não é uma autenticação segura para produção.
+> O projeto não inclui fontes não autorizadas de streaming/download. Integre somente players e conteúdos para os quais você tenha permissão.

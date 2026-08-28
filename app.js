@@ -1,78 +1,31 @@
-const A="https://graphql.anilist.co";let current=null,anime=[],tv=[],user=null;
-function toggleAuth(){document.getElementById("loginBox").hidden=!document.getElementById("loginBox").hidden;document.getElementById("signupBox").hidden=!document.getElementById("signupBox").hidden}
-document.addEventListener("keydown",e=>{
-  if(e.key==="Enter" && !document.getElementById("auth").hidden){
-    if(!document.getElementById("loginBox").hidden) login(); else signup();
-  }
-});
-function accounts(){
-  try { return JSON.parse(localStorage.getItem("opaiAccounts") || "[]"); }
-  catch(e){ localStorage.removeItem("opaiAccounts"); return []; }
-}
-function ensureAdmin(){
-  const a=accounts();
-  if(!a.some(x=>x.u==="admin")){
-    a.push({u:"admin",p:"cauhub123",admin:true});
-    localStorage.setItem("opaiAccounts",JSON.stringify(a));
-  }
-  return a;
-}
-function signup(){
-  const u=document.getElementById("signUser").value.trim();
-  const p=document.getElementById("signPass").value;
-  if(!u||!p) return alert("Preencha usuário e senha.");
-  const a=ensureAdmin();
-  if(a.some(x=>x.u===u)) return alert("Usuário já existe.");
-  a.push({u,p,admin:false});
-  localStorage.setItem("opaiAccounts",JSON.stringify(a));
-  document.getElementById("loginUser").value=u;
-  document.getElementById("loginPass").value=p;
-  toggleAuth();
-  alert("Conta criada! Agora clique em Entrar.");
-}
-function login(){
-  const u=document.getElementById("loginUser").value.trim();
-  const p=document.getElementById("loginPass").value;
-  if(!u||!p) return alert("Digite usuário e senha.");
-  const a=ensureAdmin();
-  const x=a.find(acc=>acc.u===u && acc.p===p);
-  if(!x) return alert("Usuário ou senha incorretos.");
-  user=x;
-  localStorage.setItem("opaiSession",u);
-  showSite();
-}
-function logout(){
-  localStorage.removeItem("opaiSession");
-  location.rewindow.addEventListener("load", load);
-}
-function showSite(){
-  document.getElementById("auth").hidden=true;
-  document.getElementById("site").hidden=false;
-  document.getElementById("adminNav").hidden=!user.admin;
-  document.getElementById("adminUser").textContent=user.u;
-  document.getElementById("accountCount").textContent=accounts().length;
-}
-function openSettings(){settings.showModal()}
-function showSection(s){document.querySelectorAll(".section").forEach(x=>x.hidden=true);let id=s==="series"?"seriesPage":s;$(id).hidden=false}
+const ANILIST="https://graphql.anilist.co";
+let current=null, anime=[], tv=[], user=null;
 const $=id=>document.getElementById(id);
-async function aniQuery(sort="TRENDING_DESC"){let q=`query{Page(perPage:12){media(type:ANIME,sort:${sort},isAdult:false){id title{romaji english}coverImage{large}description genres episodes status season{season year}averageScore}}}`;let r=await fetch(A,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query:q})});return (await r.json()).data.Page.media}
-async function loadSeries(){let r=await fetch("https://api.tvmaze.com/shows?page=0");return (await r.json()).slice(0,12)}
-function name(x){return x.title?.english||x.title?.romaji||x.name||"Sem título"}function clean(s){return(s||"").replace(/<[^>]+>/g,"").slice(0,220)}function poster(x){return x.coverImage?.large||x.image?.original||"https://placehold.co/300x450/151821/fff?text=OPAI"}
-function card(x,type){return `<article class="card" onclick='openDetail(${JSON.stringify(x).replace(/'/g,"&#39;")},"${type}")'><img src="${poster(x)}"><b>${name(x)}</b><small>${type==="anime"?"Anime":"Série"}${x.episodes?" • "+x.episodes+" eps":""}</small></article>`}
+function toggleAuth(){ $("loginBox").hidden=!$("loginBox").hidden; $("signupBox").hidden=!$("signupBox").hidden; }
+function accounts(){try{return JSON.parse(localStorage.getItem("opaiAccounts")||"[]")}catch(e){localStorage.removeItem("opaiAccounts");return[]}}
+function ensureAdmin(){let a=accounts();if(!a.some(x=>x.u==="admin")){a.push({u:"admin",p:"cauhub123",admin:true});localStorage.setItem("opaiAccounts",JSON.stringify(a))}return a}
+function signup(){const u=$("signUser").value.trim(),p=$("signPass").value;if(!u||!p)return alert("Preencha usuário e senha.");const a=ensureAdmin();if(a.some(x=>x.u===u))return alert("Usuário já existe.");a.push({u,p,admin:false});localStorage.setItem("opaiAccounts",JSON.stringify(a));$("loginUser").value=u;$("loginPass").value=p;toggleAuth();alert("Conta criada! Agora clique em Entrar.")}
+function login(){const u=$("loginUser").value.trim(),p=$("loginPass").value;if(!u||!p)return alert("Digite usuário e senha.");const x=ensureAdmin().find(a=>a.u===u&&a.p===p);if(!x)return alert("Usuário ou senha incorretos.");user=x;localStorage.setItem("opaiSession",u);showSite()}
+function logout(){localStorage.removeItem("opaiSession");location.reload()}
+function showSite(){$("auth").hidden=true;$("site").hidden=false;$("adminNav").hidden=!user.admin;$("profileName").textContent=user.u;$("sideUser").textContent=user.u;$("sideRole").textContent=user.admin?"ADMIN":"USUÁRIO";$("adminUser").textContent=user.u;$("accountCount").textContent=accounts().length}
+function toggleProfile(){ $("profileMenu").hidden=!$("profileMenu").hidden }
+function openSettings(){settings.showModal()}
+function showSection(id){document.querySelectorAll(".section").forEach(s=>s.hidden=true);const target=$(id);if(target)target.hidden=false;document.querySelectorAll(".nav").forEach(n=>n.classList.toggle("active",n.dataset.section===id));document.querySelectorAll(".mobile-nav button").forEach(n=>n.classList.remove("active"));}
+function clean(s){return(s||"").replace(/<[^>]+>/g,"").replace(/&quot;/g,'"').slice(0,230)}
+function title(x){return x.title?.english||x.title?.romaji||x.name||"Sem título"}
+function poster(x){return x.coverImage?.large||x.image?.original||x.image?.medium||"https://placehold.co/300x450/151821/fff?text=OPAI"}
+function card(x,type){const id=encodeURIComponent(JSON.stringify(x));return `<article class="card" onclick='openDetail(JSON.parse(decodeURIComponent("${id}")),"${type}")'><div class="poster"><img loading="lazy" src="${poster(x)}" alt=""></div><b>${title(x)}</b><small>${type==="anime"?"Anime":"Série"}${x.episodes?" • EP "+x.episodes:""}</small></article>`}
 function render(id,arr,type){$(id).innerHTML=arr.map(x=>card(x,type)).join("")}
-async function load(){try{anime=await aniQuery();tv=await loadSeries();render("popular",anime.slice(0,6),"anime");render("new",anime.slice(6,12),"anime");render("seriesHome",tv.slice(0,6),"series");render("animeAll",anime,"anime");render("seriesAll",tv,"series");current=anime[0];heroTitle.textContent=name(current);heroDesc.textContent=clean(current.description);search.oninput=()=>{let q=search.value.toLowerCase();render("popular",anime.filter(x=>name(x).toLowerCase().includes(q)),"anime")}}catch(e){heroTitle.textContent="Opai Hub";heroDesc.textContent="Não foi possível carregar o catálogo agora."}}
-function openCurrent(){openDetail(current,"anime")}
-function openDetail(x,type){let seasons=x.season?.year?`Temporada ${x.season.year}`:"Temporadas disponíveis";detailBody.innerHTML=`<h1>${name(x)}</h1><div style="display:grid;grid-template-columns:180px 1fr;gap:20px"><img src="${poster(x)}" style="width:180px;border-radius:9px"><div><p>${clean(x.description||x.summary)}</p><p><b>${type==="anime"?"Anime":"Série"}</b> • ${seasons} ${x.episodes?"• "+x.episodes+" episódios":""}</p><h3>Temporadas e episódios</h3><div id="episodes"><p class="notice">Os metadados de episódios/temporadas são carregados quando a fonte pública disponibiliza esses dados.</p><button class="primary" onclick="loadEpisodes('${x.id}','${type}')">Carregar episódios</button></div></div></div><div class="empty" style="margin-top:20px;text-align:center">▶ Área de reprodução — somente conteúdo autorizado.</div>`;details.showModal()}
-async function loadEpisodes(id,type){let el=$("episodes");if(type==="series"){let r=await fetch("https://api.tvmaze.com/shows/"+id+"/episodes");let eps=await r.json();el.innerHTML=eps.map(e=>`<div style="padding:9px;border-bottom:1px solid #252833"><b>T${e.season} • E${e.number}</b> — ${e.name}</div>`).join("")}else el.innerHTML="<p>Para animes, a API pública fornece temporadas/episódios quando disponíveis no registro. A reprodução deve usar uma fonte autorizada.</p>"}
-ensureAdmin();
-let session=localStorage.getItem("opaiSession"),storedAccounts=accounts();
-if(session){
-  user=storedAccounts.find(acc=>acc.u===session);
-  if(user) showSite();
-  else localStorage.removeItem("opaiSession");
-}
-if(!user){
-  document.getElementById("auth").hidden=false;
-  document.getElementById("site").hidden=true;
-}
-window.addEventListener("load", load);
+async function aniQuery(sort="TRENDING_DESC"){const q=`query{Page(perPage:18){media(type:ANIME,sort:${sort},isAdult:false){id title{romaji english}coverImage{large}description genres episodes status season{season year}averageScore}}}`;const r=await fetch(ANILIST,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query:q})});if(!r.ok)throw Error("AniList");return(await r.json()).data.Page.media}
+async function loadSeries(){const r=await fetch("https://api.tvmaze.com/shows?page=0");if(!r.ok)throw Error("TVMaze");return(await r.json()).slice(0,18)}
+function hero(x){current=x;$("heroTitle").textContent=title(x);$("heroDesc").textContent=clean(x.description)||"Uma nova história para acompanhar.";$("heroYear").textContent=x.season?.year||"2026";$("heroSeasons").textContent=x.season?.year?"1 Temporada":"Temporadas";$("heroTags").innerHTML=(x.genres||["Ação","Aventura","Fantasia"]).slice(0,3).map(g=>`<span>${g}</span>`).join("");$("hero").style.backgroundImage=`url("${poster(x)}")`}
+function renderAiring(){$("airingList").innerHTML=anime.slice(0,5).map(x=>`<div class="airing-item"><img src="${poster(x)}"><div><b>${title(x)}</b><small>EP ${x.episodes||"—"} <span class="new-pill">Novo</span></small></div></div>`).join("")}
+async function load(){try{anime=await aniQuery();tv=await loadSeries();hero(anime[0]);renderAiring();render("popular",anime.slice(0,6),"anime");render("newCards",anime.slice(6,12),"anime");render("seriesHome",tv.slice(0,6),"series");render("animeAll",anime,"anime");render("seriesAll",tv,"series");render("trendingAll",anime.slice(0,12),"anime");render("newAll",anime.slice(6,18),"anime");$("search").addEventListener("input",e=>{const q=e.target.value.toLowerCase();const aa=anime.filter(x=>title(x).toLowerCase().includes(q));const ss=tv.filter(x=>title(x).toLowerCase().includes(q));render("popular",aa.slice(0,6),"anime");render("seriesHome",ss.slice(0,6),"series")})}catch(e){$("heroTitle").textContent="Opai Hub";$("heroDesc").textContent="Não foi possível carregar o catálogo agora. Verifique sua conexão."}}
+function openCurrent(){if(current)openDetail(current,"anime")}
+function addCurrent(){alert("Título adicionado à Minha Lista.")}
+function showRandom(){if(!anime.length)return;hero(anime[Math.floor(Math.random()*anime.length)])}
+function openDetail(x,type){const desc=clean(x.description||x.summary);$("detailBody").innerHTML=`<div style="display:grid;grid-template-columns:180px 1fr;gap:20px"><img src="${poster(x)}" style="width:180px;border-radius:9px"><div><span class="pill accent">${type==="anime"?"ANIME":"SÉRIE"}</span><h1>${title(x)}</h1><p style="color:#aaa;line-height:1.5">${desc||"Sem descrição disponível."}</p><p><b>${type==="anime"?(x.episodes?x.episodes+" episódios":"Episódios disponíveis"):(x.premiered||"Série")}</b></p><h3>Temporadas e episódios</h3><div id="episodes" class="empty">Carregando informações públicas de episódios...</div></div></div><div class="notice" style="margin-top:18px;text-align:center">▶ Área de reprodução: use apenas vídeos e conteúdos para os quais você tenha autorização. Trailers e players oficiais podem ser integrados aqui.</div>`;details.showModal();if(type==="series")loadSeriesEpisodes(x.id);else $("episodes").textContent=x.episodes?`Temporada atual • ${x.episodes} episódios registrados na fonte de informações.`:"A fonte pública não informou a quantidade de episódios."}
+async function loadSeriesEpisodes(id){try{const r=await fetch(`https://api.tvmaze.com/shows/${id}/episodes`);const eps=await r.json();$("episodes").innerHTML=eps.slice(0,60).map(e=>`<div style="padding:8px 0;border-bottom:1px solid #252833"><b>T${e.season} • E${e.number}</b> — ${e.name}</div>`).join("")}catch(e){$("episodes").textContent="Não foi possível carregar os episódios agora."}}
+ensureAdmin();const session=localStorage.getItem("opaiSession");if(session){user=accounts().find(a=>a.u===session);if(user)showSite();else localStorage.removeItem("opaiSession")}
+if(!user){$("auth").hidden=false;$("site").hidden=true}
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&!$("auth").hidden){if(!$("loginBox").hidden)login();else signup()}});window.addEventListener("load",load);
