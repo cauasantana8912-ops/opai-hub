@@ -1,28 +1,21 @@
 <!doctype html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b0714"><meta name="description" content="Opai Hub — catálogo de animes e séries com layout PC e mobile.">
-<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="assets/opai-hub-brand.png">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
-<title>Opai Hub — Animes & Séries</title>
-</head>
+<html lang="pt-BR"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Opai Hub</title><link rel="stylesheet" href="styles.css"></head>
 <body>
-<div id="app">
-<header class="topbar"><button class="icon-btn mobile-only" id="menuBtn">☰</button><a class="brand" href="#home"><span class="brand-dot">✦</span> OPAI HUB</a><nav><a href="#home">Início</a><a href="#anime">Animes</a><a href="#series">Séries</a><a href="#trending">Em alta</a><a href="#offline">♡ Minha lista</a><a href="#offline">⇩ Offline</a></nav><div class="top-actions"><button class="search-open" id="searchBtn">⌕ <span>Buscar animes e séries...</span><kbd>Ctrl K</kbd></button><button class="icon-btn" id="themeBtn" title="Tema">☼</button><button class="user-chip" id="adminBtn">● <span>Opai Hub</span></button></div></header>
-<aside class="drawer" id="drawer"><a href="#home">Início</a><a href="#anime">Animes</a><a href="#series">Séries</a><a href="#trending">Em alta</a><a href="#offline">Minha lista</a><a href="#offline">Offline</a></aside>
-<main>
-<section class="hero" id="home"><div class="hero-bg" id="heroBg"></div><div class="hero-overlay"></div><div class="hero-content"><div class="eyebrow">EM ALTA • OPAI HUB</div><h1 id="heroTitle">Carregando seu próximo favorito...</h1><p id="heroMeta">Anime • Aventura • Fantasia</p><p id="heroDesc">Descubra animes e séries, salve seus favoritos e continue de onde parou.</p><div class="hero-buttons"><button class="primary" id="heroWatch">▶ Assistir</button><button class="secondary" id="heroDetails">ⓘ Detalhes</button></div></div></section>
-<section class="content" id="trending"><div class="section-head"><div><span class="section-kicker">CATÁLOGO</span><h2>Escolha o que assistir</h2></div><div class="tabs"><button class="tab active" data-filter="all">Todos</button><button class="tab" data-filter="anime">Animes</button><button class="tab" data-filter="series">Séries</button></div></div>
-<div class="layout"><div class="main-col"><div class="section-row"><h3>🔥 Em alta</h3><button class="see-more" data-more="trending">Ver tudo</button></div><div class="cards" id="trendingGrid"></div><div class="section-row" id="anime"><h3>🆕 Novos episódios</h3><button class="see-more">Ver tudo</button></div><div class="cards" id="animeGrid"></div><div class="section-row" id="series"><h3>📺 Séries</h3><button class="see-more">Ver tudo</button></div><div class="cards" id="seriesGrid"></div></div><aside class="right-col"><div class="side-head"><h3>📺 Top Airing</h3><span>AO VIVO</span></div><div id="topAiring"></div></aside></div></section>
-<section class="offline content" id="offline"><div class="section-head"><div><span class="section-kicker">SUA BIBLIOTECA</span><h2>♡ Minha lista & Offline</h2></div></div><div class="offline-box"><div><b>Salve títulos para encontrar depois</b><p>A lista fica salva neste navegador. O modo offline também guarda o aplicativo e os dados básicos do catálogo; episódios protegidos não são baixados.</p></div><button class="secondary" id="installBtn">⇩ Instalar app</button></div><div class="cards" id="savedGrid"></div></section>
-</main>
-<footer>Opai Hub • catálogo alimentado por dados públicos de AniList e TVmaze. <span>Conteúdo de reprodução deve ser autorizado pelos respectivos provedores.</span></footer>
-</div>
-<div class="search-modal" id="searchModal"><div class="search-panel"><button class="close" id="closeSearch">×</button><input id="searchInput" autofocus placeholder="Pesquise anime ou série..."><div id="searchResults"></div></div></div>
-<div class="detail-modal" id="detailModal"><div class="detail-panel"><button class="close" id="closeDetail">×</button><div id="detailBody"></div></div></div>
-<div class="admin-modal" id="adminModal"><div class="admin-panel"><button class="close" id="closeAdmin">×</button><div id="adminBody"></div></div></div>
-<script src="app.js"></script>
-</body></html>
+<div id="auth" class="auth"><div class="auth-card"><div class="logo">OPAI <b>HUB</b></div>
+<div id="loginBox"><h1>Entrar</h1><p>Acesse sua conta Opai Hub.</p><input id="loginUser" placeholder="Usuário"><input id="loginPass" type="password" placeholder="Senha"><button class="primary" onclick="login()">Entrar</button><button class="link" onclick="toggleAuth()">Criar conta</button></div>
+<div id="signupBox" hidden><h1>Criar conta</h1><input id="signUser" placeholder="Usuário"><input id="signPass" type="password" placeholder="Senha"><button class="primary" onclick="signup()">Cadastrar</button><button class="link" onclick="toggleAuth()">Já tenho conta</button></div>
+</div></div>
+<div id="site" hidden>
+<header><div class="logo">OPAI <b>HUB</b></div><div class="search"><input id="search" placeholder="Buscar animes e séries..."></div><button onclick="openSettings()">⚙️</button><button onclick="logout()">Sair</button></header>
+<div class="layout"><aside><button class="nav active" onclick="showSection('home')">⌂ Início</button><button class="nav" onclick="showSection('anime')">◈ Animes</button><button class="nav" onclick="showSection('series')">▣ Séries</button><button class="nav" onclick="showSection('offline')">⇩ Offline</button><button class="nav" onclick="showSection('admin')" id="adminNav" hidden>👑 Administração</button></aside>
+<main><section id="home" class="section"><div class="hero"><div><small>OPAI HUB • EM ALTA</small><h1 id="heroTitle">Carregando...</h1><p id="heroDesc"></p><button class="primary" onclick="openCurrent()">▶ Ver detalhes</button></div></div><h2>🔥 Em Alta</h2><div id="popular" class="cards"></div><h2>🆕 Novos episódios</h2><div id="new" class="cards"></div><h2>📺 Séries</h2><div id="series" class="cards"></div></section>
+<section id="anime" class="section" hidden><h1>Animes</h1><div id="animeAll" class="cards"></div></section>
+<section id="seriesPage" class="section" hidden><h1>Séries</h1><div id="seriesAll" class="cards"></div></section>
+<section id="offline" class="section" hidden><h1>Offline</h1><div class="empty">Seus conteúdos autorizados salvos para acesso offline aparecerão aqui.</div></section>
+<section id="admin" class="section" hidden><h1>👑 Administração</h1><div class="admin-grid"><div><b>Usuário</b><span id="adminUser"></span></div><div><b>Contas</b><span id="accountCount"></span></div><div><b>Catálogo</b><span>Atualização automática</span></div></div><p class="notice">A área administrativa é exibida somente para a conta marcada como administradora. Em GitHub Pages, autenticação real precisa de backend; este login é apenas uma demonstração local.</p></section>
+</main></div></div>
+<dialog id="details"><button class="x" onclick="details.close()">×</button><div id="detailBody"></div></dialog>
+<dialog id="settings"><button class="x" onclick="settings.close()">×</button><h2>⚙️ Configurações</h2><label>Tema <select><option>Opai Roxo</option><option>Escuro</option></select></label><label>Idioma <select><option>Português</option></select></label><button class="primary" onclick="settings.close()">Salvar</button></dialog>
+<script src="app.js"></script></body></html>
