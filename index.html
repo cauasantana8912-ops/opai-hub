@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Opai Hub — seu hub, seu mundo, seu estilo." />
+  <meta name="theme-color" content="#09070f" />
+  <link rel="canonical" href="https://opaihub.com/" />
+  <meta property="og:title" content="Opai Hub" />
+  <meta property="og:description" content="Seu hub. Seu mundo. Seu estilo." />
+  <meta property="og:url" content="https://opaihub.com/" />
+  <meta property="og:type" content="website" />
+  <title>Opai Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="assets/opai-hub-brand.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="toast" class="toast" role="status"></div>
+
+  <section id="authView" class="auth-view">
+    <div class="auth-glow glow-a"></div><div class="auth-glow glow-b"></div>
+    <div class="auth-card">
+      <img class="auth-logo" src="assets/opai-hub-brand.png" alt="Opai Hub" />
+      <p class="tagline">SEU HUB. SEU MUNDO. SEU ESTILO.</p>
+      <div class="tabs"><button class="tab active" data-auth="login">Entrar</button><button class="tab" data-auth="register">Criar conta</button></div>
+      <form id="loginForm" class="auth-form">
+        <label>Usuário<input id="loginUser" required autocomplete="username" placeholder="Digite seu usuário" /></label>
+        <label>Senha<input id="loginPass" type="password" required autocomplete="current-password" placeholder="Digite sua senha" /></label>
+        <button class="primary big" type="submit">Entrar no Opai Hub <span>→</span></button>
+      </form>
+      <form id="registerForm" class="auth-form hidden">
+        <label>Nome de usuário<input id="registerUser" required minlength="3" autocomplete="username" placeholder="Escolha um usuário" /></label>
+        <label>Senha<input id="registerPass" type="password" required minlength="4" autocomplete="new-password" placeholder="Crie uma senha" /></label>
+        <label>Confirmar senha<input id="registerPass2" type="password" required minlength="4" autocomplete="new-password" placeholder="Repita a senha" /></label>
+        <button class="primary big" type="submit">Criar minha conta <span>→</span></button>
+      </form>
+      <small class="demo-note">Demo local: os dados ficam salvos somente neste navegador.</small>
+    </div>
+  </section>
+
+  <div id="appView" class="hidden">
+    <header class="topbar">
+      <a class="logo" href="#inicio" aria-label="Opai Hub início"><img src="assets/opai-hub-brand.png" alt="Opai Hub" /><span>OPAI <b>HUB</b></span></a>
+      <nav class="nav-links" aria-label="Navegação principal">
+        <a class="active" href="#inicio">Início</a><a href="#explorar">Explorar</a><a href="#categorias">Categorias</a><a href="#novidades">Novidades</a><a href="#sobre">Sobre</a>
+      </nav>
+      <div class="top-actions"><button id="themeBtn" class="icon-btn" title="Alternar tema">☼</button><span id="userBadge" class="user-badge"></span><button id="logoutBtn" class="outline-btn">Sair</button></div>
+    </header>
+
+    <main>
+      <section id="inicio" class="hero-section">
+        <div class="hero-content container">
+          <div class="hero-copy">
+            <p class="eyebrow"><span>✦</span> SEU HUB. SEU MUNDO. SEU ESTILO.</p>
+            <h1>Explore. Descubra.<br>Viva o <span>seu estilo.</span></h1>
+            <p class="hero-description">Opai Hub é o seu espaço para encontrar, compartilhar e se conectar com o que realmente importa.</p>
+            <div class="hero-actions"><a class="primary hero-btn" href="#explorar">▦ &nbsp; Explorar agora</a><a class="secondary hero-btn" href="#sobre">Saiba mais &nbsp;▷</a></div>
+            <div class="search-box"><span>⌕</span><input id="searchInput" placeholder="Buscar conteúdos, categorias, usuários..."/><button id="searchBtn" class="primary">Buscar</button></div>
+            <div id="categoryBar" class="category-bar"><button class="category active" data-category="all">▦ &nbsp; Todos</button><button class="category" data-category="Tecnologia">▣ &nbsp; Tecnologia</button><button class="category" data-category="Jogos">⌘ &nbsp; Jogos</button><button class="category" data-category="Entretenimento">▷ &nbsp; Entretenimento</button><button class="category" data-category="Música">♫ &nbsp; Música</button><button class="category" data-category="Filmes">▱ &nbsp; Filmes</button><button class="category" data-category="Animes">◉ &nbsp; Animes</button><button class="category" data-category="Mais">••• &nbsp; Mais⌄</button></div>
+          </div>
+          <div class="hero-art" aria-label="Identidade visual Opai Hub"><div class="art-ring"></div><div class="big-symbol"><span>O</span><b>H</b><i>♛</i></div><div class="art-wordmark">OPAI <span>HUB</span></div><div class="art-tagline">— &nbsp; SEU HUB. SEU MUNDO. SEU ESTILO. &nbsp; —</div></div>
+        </div>
+      </section>
+
+      <section id="explorar" class="featured-section container">
+        <div class="section-heading"><div><p class="eyebrow">✦ CONTEÚDO EM ALTA</p><h2>Destaques</h2></div><button class="link-btn" id="showAllBtn">Ver todos &nbsp;›</button></div>
+        <div id="cards" class="cards">
+          <article class="content-card" data-category="Tecnologia" data-search="tecnologia setup gamer computador dicas setup gamer perfeito"><div class="thumb tech"><span>TECNOLOGIA</span></div><div class="card-meta"><span>Tecnologia</span><small>5 min</small></div><h3>Setup Gamer Perfeito</h3><p>Dicas para montar o setup dos seus sonhos gastando menos.</p><button class="bookmark" title="Salvar">♡</button></article>
+          <article class="content-card" data-category="Jogos" data-search="jogos rpg mundo aberto games aventura"><div class="thumb games"><span>JOGOS</span></div><div class="card-meta"><span>Jogos</span><small>8 min</small></div><h3>Top 10 RPGs de Mundo Aberto</h3><p>Os melhores jogos de RPG para você explorar sem limites.</p><button class="bookmark" title="Salvar">♡</button></article>
+          <article class="content-card" data-category="Música" data-search="musica playlist lofi chill estudo"><div class="thumb music"><span>MÚSICA</span></div><div class="card-meta"><span>Música</span><small>4 min</small></div><h3>Playlist Lofi Chill</h3><p>As melhores músicas para relaxar, estudar ou trabalhar.</p><button class="bookmark" title="Salvar">♡</button></article>
+          <article class="content-card" data-category="Filmes" data-search="filmes cinema clássicos entretenimento"><div class="thumb movies"><span>FILMES</span></div><div class="card-meta"><span>Filmes</span><small>6 min</small></div><h3>Filmes que Marcaram Época</h3><p>Relembre clássicos que marcaram gerações.</p><button class="bookmark" title="Salvar">♡</button></article>
+          <article class="content-card" data-category="Animes" data-search="animes anime ação personagens"><div class="thumb anime"><span>ANIMES</span></div><div class="card-meta"><span>Animes</span><small>7 min</small></div><h3>Animes Imperdíveis</h3><p>Uma lista com animes que você precisa assistir!</p><button class="bookmark" title="Salvar">♡</button></article>
+        </div>
+        <p id="emptyState" class="empty-state hidden">Nenhum conteúdo encontrado.</p>
+      </section>
+
+      <section id="categorias" class="info-section container"><div class="info-card"><p class="eyebrow">CATEGORIAS</p><h2>Um hub feito para explorar.</h2><p>Encontre tecnologia, jogos, música, filmes, animes e muito mais em um só lugar.</p></div><div class="info-grid"><div>▣<b>Tecnologia</b><span>Ideias e novidades</span></div><div>⌘<b>Jogos</b><span>Games e diversão</span></div><div>♫<b>Música</b><span>Playlists e descobertas</span></div><div>◉<b>Animes</b><span>Universos para explorar</span></div></div></section>
+      <section id="novidades" class="info-section container"><div class="wide-card"><p class="eyebrow">NOVIDADES</p><h2>Seu próximo conteúdo começa aqui.</h2><p>Use a busca e os filtros para encontrar rapidamente o que você quer ver.</p><a class="primary hero-btn" href="#explorar">Explorar destaques →</a></div></section>
+      <section id="sobre" class="info-section container"><div class="wide-card about"><p class="eyebrow">SOBRE OPAI HUB</p><h2>Seu hub. Seu mundo. Seu estilo.</h2><p>Uma experiência visual inspirada em tecnologia, comunidade e descoberta.</p></div></section>
+
+      <section id="adminPanel" class="panel container hidden"><div class="panel-head"><div><p class="eyebrow">ADMINISTRAÇÃO</p><h2>Painel Admin</h2></div><button id="closeAdmin" class="ghost">Fechar</button></div><div class="stats"><div><b id="userCount">0</b><span>contas registradas</span></div><div><b>Online</b><span>status do hub</span></div><div><b>v2.0</b><span>versão</span></div></div><p>Este painel é uma demonstração local. Para produção, autenticação e dados devem ficar protegidos no servidor.</p></section>
+    </main>
+
+    <nav class="mobile-nav" aria-label="Navegação mobile"><a class="active" href="#inicio">⌂<span>Início</span></a><a href="#explorar">▦<span>Explorar</span></a><a href="#explorar" id="mobileSearch">⌕<span>Buscar</span></a><a href="#categorias">♡<span>Favoritos</span></a><a href="#sobre">◯<span>Conta</span></a></nav>
+
+    <footer><div class="container footer-inner"><span>© 2026 Opai Hub</span><span>Seu hub. Seu mundo. Seu estilo.</span></div></footer>
+  </div>
+
+  <dialog id="customizeDialog"><form method="dialog" class="dialog-card"><h3>Personalizar interface</h3><label>Cor de destaque<select id="accentSelect"><option value="purple">Roxo</option><option value="pink">Magenta</option><option value="blue">Azul</option></select></label><label>Densidade<select id="densitySelect"><option value="comfortable">Confortável</option><option value="compact">Compacta</option></select></label><div class="dialog-actions"><button value="cancel" class="ghost">Cancelar</button><button id="saveCustomization" value="default" class="primary">Salvar</button></div></form></dialog>
+  <script src="app.js"></script>
+</body>
+</html>
