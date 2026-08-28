@@ -1,8 +1,13 @@
 const A="https://graphql.anilist.co";let current=null,anime=[],tv=[],user=null;
-function toggleAuth(){loginBox.hidden=!loginBox.hidden;signupBox.hidden=!signupBox.hidden}
+function toggleAuth(){document.getElementById("loginBox").hidden=!document.getElementById("loginBox").hidden;document.getElementById("signupBox").hidden=!document.getElementById("signupBox").hidden}
+document.addEventListener("keydown",e=>{
+  if(e.key==="Enter" && !document.getElementById("auth").hidden){
+    if(!document.getElementById("loginBox").hidden) login(); else signup();
+  }
+});
 function accounts(){return JSON.parse(localStorage.getItem("opaiAccounts")||"[]")}
-function signup(){let u=signUser.value.trim(),p=signPass.value;if(!u||!p)return alert("Preencha os campos.");let a=accounts();if(a.some(x=>x.u===u))return alert("Usuário já existe.");a.push({u,p,admin:false});localStorage.setItem("opaiAccounts",JSON.stringify(a));alert("Conta criada!");toggleAuth()}
-function login(){let u=loginUser.value.trim(),p=loginPass.value,a=accounts();if(!a.length&&u==="admin"&&p==="cauhub123"){a=[{u:"admin",p:"cauhub123",admin:true}];localStorage.setItem("opaiAccounts",JSON.stringify(a))}let x=a.find(x=>x.u===u&&x.p===p);if(!x)return alert("Usuário ou senha incorretos.");user=x;localStorage.setItem("opaiSession",u);showSite()}
+function signup(){let u=document.getElementById("signUser").value.trim(),p=document.getElementById("signPass").value;if(!u||!p)return alert("Preencha os campos.");let a=accounts();if(a.some(x=>x.u===u))return alert("Usuário já existe.");a.push({u,p,admin:false});localStorage.setItem("opaiAccounts",JSON.stringify(a));alert("Conta criada!");toggleAuth()}
+function login(){let u=document.getElementById("loginUser").value.trim(),p=document.getElementById("loginPass").value,a=accounts();if(!a.length&&u==="admin"&&p==="cauhub123"){a=[{u:"admin",p:"cauhub123",admin:true}];localStorage.setItem("opaiAccounts",JSON.stringify(a))}let x=a.find(x=>x.u===u&&x.p===p);if(!x)return alert("Usuário ou senha incorretos.");user=x;localStorage.setItem("opaiSession",u);showSite()}
 function logout(){localStorage.removeItem("opaiSession");location.reload()}
 function showSite(){auth.hidden=true;site.hidden=false;adminNav.hidden=!user?.admin;adminUser.textContent=user?.u||"";accountCount.textContent=accounts().length}
 function openSettings(){settings.showModal()}
@@ -17,4 +22,10 @@ async function load(){try{anime=await aniQuery();tv=await loadSeries();render("p
 function openCurrent(){openDetail(current,"anime")}
 function openDetail(x,type){let seasons=x.season?.year?`Temporada ${x.season.year}`:"Temporadas disponíveis";detailBody.innerHTML=`<h1>${name(x)}</h1><div style="display:grid;grid-template-columns:180px 1fr;gap:20px"><img src="${poster(x)}" style="width:180px;border-radius:9px"><div><p>${clean(x.description||x.summary)}</p><p><b>${type==="anime"?"Anime":"Série"}</b> • ${seasons} ${x.episodes?"• "+x.episodes+" episódios":""}</p><h3>Temporadas e episódios</h3><div id="episodes"><p class="notice">Os metadados de episódios/temporadas são carregados quando a fonte pública disponibiliza esses dados.</p><button class="primary" onclick="loadEpisodes('${x.id}','${type}')">Carregar episódios</button></div></div></div><div class="empty" style="margin-top:20px;text-align:center">▶ Área de reprodução — somente conteúdo autorizado.</div>`;details.showModal()}
 async function loadEpisodes(id,type){let el=$("episodes");if(type==="series"){let r=await fetch("https://api.tvmaze.com/shows/"+id+"/episodes");let eps=await r.json();el.innerHTML=eps.map(e=>`<div style="padding:9px;border-bottom:1px solid #252833"><b>T${e.season} • E${e.number}</b> — ${e.name}</div>`).join("")}else el.innerHTML="<p>Para animes, a API pública fornece temporadas/episódios quando disponíveis no registro. A reprodução deve usar uma fonte autorizada.</p>"}
-let s=localStorage.getItem("opaiSession"),a=accounts();if(s){user=a.find(x=>x.u===s);if(user)showSite()}else showSite=false;load();
+let session=localStorage.getItem("opaiSession"),storedAccounts=accounts();
+if(session){
+  user=storedAccounts.find(x=>x.u===session);
+  if(user){showSite();}else{localStorage.removeItem("opaiSession");}
+}
+if(!user){document.getElementById("auth").hidden=false;document.getElementById("site").hidden=true;}
+load();
