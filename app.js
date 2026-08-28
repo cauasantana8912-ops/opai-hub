@@ -187,8 +187,8 @@ function initApp(){
   $("search").addEventListener("keydown",e=>{if(e.key==="Enter")doSearch()});
   $("search").addEventListener("input",e=>{if(e.target.value.length>1)doSearch()});
   const form=$("loginBox");
-  if(form) form.addEventListener("submit",e=>{e.preventDefault();login();});
-  $("loginBtn").onclick=e=>{e.preventDefault();login();};
+  if(form) form.addEventListener("submit",e=>{e.preventDefault(); if(window.opaiLoginFallback) window.opaiLoginFallback(); else login();});
+  if($("loginBtn")) $("loginBtn").onclick=e=>{e.preventDefault(); if(window.opaiLoginFallback) window.opaiLoginFallback(); else login();};
   $("signupBtn").onclick=signup;
   $("showSignup").onclick=()=>toggleAuth(true);
   $("showLogin").onclick=()=>toggleAuth(false);

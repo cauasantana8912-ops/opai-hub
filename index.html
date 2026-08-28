@@ -7,6 +7,7 @@
 <title>Opai Hub</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="styles.css">
+<style>[hidden]{display:none!important}</style>
 </head>
 <body>
 <div id="auth" class="auth">
@@ -18,7 +19,7 @@
       <input id="loginUser" autocomplete="username" placeholder="Usuário">
       <input id="loginPass" autocomplete="current-password" type="password" placeholder="Senha">
       <button type="submit" class="primary full" id="loginBtn">Entrar</button>
-      <button class="link" id="showSignup">Criar conta</button>
+      <button type="button" class="link" id="showSignup">Criar conta</button>
       <p class="login-help">Conta de demonstração: <b>admin</b> / <b>cauhub123</b></p>
     </form>
     <div id="signupBox" hidden>
@@ -27,7 +28,7 @@
       <input id="signUser" autocomplete="username" placeholder="Usuário">
       <input id="signPass" autocomplete="new-password" type="password" placeholder="Senha">
       <button class="primary full" id="signupBtn">Cadastrar</button>
-      <button class="link" id="showLogin">Já tenho conta</button>
+      <button type="button" class="link" id="showLogin">Já tenho conta</button>
     </div>
     <div id="authMsg" class="auth-msg" aria-live="polite"></div>
   </div>
@@ -132,23 +133,37 @@
 </dialog>
 
 <script>
+// Login local de demonstração: funciona mesmo se o app.js estiver em cache/indisponível.
 window.opaiLoginFallback=function(){
   const u=(document.getElementById("loginUser")?.value||"").trim().toLowerCase();
   const p=document.getElementById("loginPass")?.value||"";
   const msg=document.getElementById("authMsg");
-  if(u==="admin" && p==="cauhub123"){
-    try{localStorage.setItem("opaiSession","admin");localStorage.setItem("opaiAccounts",JSON.stringify([{u:"admin",p:"cauhub123",admin:true}]))}catch(e){}
-    const auth=document.getElementById("auth"),site=document.getElementById("site");
-    if(auth)auth.hidden=true; if(site)site.hidden=false;
-    const nav=document.getElementById("adminNav"); if(nav)nav.hidden=false;
-    const au=document.getElementById("adminUser"); if(au)au.textContent="admin";
+  if(u!=="admin" || p!=="cauhub123"){
+    if(msg) msg.textContent="Usuário ou senha incorretos. Use admin / cauhub123.";
     return false;
   }
-  if(msg)msg.textContent="Usuário ou senha incorretos. Use admin / cauhub123.";
+  try{
+    localStorage.setItem("opaiSession","admin");
+    localStorage.setItem("opaiAccounts",JSON.stringify([{u:"admin",p:"cauhub123",admin:true}]));
+  }catch(e){}
+  const auth=document.getElementById("auth"),site=document.getElementById("site"),nav=document.getElementById("adminNav"),au=document.getElementById("adminUser");
+  if(auth) auth.setAttribute("hidden","");
+  if(site) site.removeAttribute("hidden");
+  if(nav) nav.removeAttribute("hidden");
+  if(au) au.textContent="admin";
+  if(msg) msg.textContent="";
   return false;
 };
-document.getElementById("loginBox")?.addEventListener("submit",e=>{e.preventDefault();window.opaiLoginFallback();});
+document.getElementById("loginBox")?.addEventListener("submit",function(e){
+  e.preventDefault();
+  window.opaiLoginFallback();
+});
+document.getElementById("loginBtn")?.addEventListener("click",function(e){
+  e.preventDefault();
+  window.opaiLoginFallback();
+});
 </script>
-<script src="./app.js"></script>
+
+<script src="app.js?v=20260828-login-fix-final" defer></script>
 </body>
 </html>
