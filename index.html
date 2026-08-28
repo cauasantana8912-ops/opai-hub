@@ -131,6 +131,22 @@
   <button class="primary" id="saveSettings">Salvar</button>
 </dialog>
 
-<script src="app.js"></script>
+<script>
+window.login=function(){
+  const u=(document.getElementById('loginUser')?.value||'').trim().toLowerCase();
+  const p=document.getElementById('loginPass')?.value||'';
+  const msg=document.getElementById('authMsg');
+  if(u==='admin' && p==='cauhub123'){
+    try{localStorage.setItem('opaiSession','admin');localStorage.setItem('opaiAccounts',JSON.stringify([{u:'admin',p:'cauhub123',admin:true}]))}catch(e){}
+    document.getElementById('auth').hidden=true;
+    document.getElementById('site').hidden=false;
+    if(window.showSite) window.showSite();
+    return false;
+  }
+  if(msg) msg.textContent='Usuário ou senha incorretos. Use admin / cauhub123.';
+  return false;
+};
+</script>
+<script src="app.js?v=20260828-login-final"></script>
 </body>
 </html>
