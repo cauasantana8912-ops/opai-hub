@@ -181,17 +181,30 @@ function doSearch(){
  const a=anime.filter(x=>title(x).toLowerCase().includes(q)),s=series.filter(x=>title(x).toLowerCase().includes(q));
  showSection("anime");$("animeAll").innerHTML=[...a.map(x=>card(x,"anime")), ...s.map(x=>card(x,"series"))].join("");bindCards()
 }
-document.querySelectorAll(".nav,.mobile-bottom button").forEach(b=>b.onclick=()=>showSection(b.dataset.section));
-document.querySelectorAll("[data-more]").forEach(b=>b.onclick=()=>showSection(b.dataset.more==="new"?"new":b.dataset.more==="series"?"series":"anime"));
-$("search").addEventListener("keydown",e=>{if(e.key==="Enter")doSearch()});
-$("search").addEventListener("input",e=>{if(e.target.value.length>1)doSearch()});
-$("loginBtn").onclick=login;$("signupBtn").onclick=signup;$("showSignup").onclick=()=>toggleAuth(true);$("showLogin").onclick=()=>toggleAuth(false);$("logoutBtn").onclick=logout;
-document.addEventListener("keydown",e=>{if(e.key==="Enter"&& !$("auth").hidden)login()});
-$("clearContinue").onclick=()=>{localStorage.removeItem("opaiProgress");renderContinue()};
-$("settingsBtn").onclick=()=>{$("settings").showModal()};$("closeSettings").onclick=()=>$("settings").close();$("closeDetails").onclick=()=>$("details").close();
-$("saveSettings").onclick=()=>{document.body.classList.toggle("compact",$("densitySelect").value==="compact");localStorage.setItem("opaiDensity",$("densitySelect").value);$("settings").close()};
-$("menuBtn").onclick=()=>{$("sidebar").classList.toggle("open")};
-const density=localStorage.getItem("opaiDensity");if(density==="compact")document.body.classList.add("compact");
-ensureAdmin();
-const session=localStorage.getItem("opaiSession")||sessionStorage.getItem("opaiSession"),found=accounts().find(a=>String(a.u||"").toLowerCase()===String(session||"").toLowerCase());
-if(found){user=found;showSite()}else{$("auth").hidden=false;$("site").hidden=true}
+function initApp(){
+  document.querySelectorAll(".nav,.mobile-bottom button").forEach(b=>b.onclick=()=>showSection(b.dataset.section));
+  document.querySelectorAll("[data-more]").forEach(b=>b.onclick=()=>showSection(b.dataset.more==="new"?"new":b.dataset.more==="series"?"series":"anime"));
+  $("search").addEventListener("keydown",e=>{if(e.key==="Enter")doSearch()});
+  $("search").addEventListener("input",e=>{if(e.target.value.length>1)doSearch()});
+  const form=$("loginBox");
+  if(form) form.addEventListener("submit",e=>{e.preventDefault();login();});
+  $("loginBtn").onclick=e=>{e.preventDefault();login();};
+  $("signupBtn").onclick=signup;
+  $("showSignup").onclick=()=>toggleAuth(true);
+  $("showLogin").onclick=()=>toggleAuth(false);
+  $("logoutBtn").onclick=logout;
+  $("clearContinue").onclick=()=>{localStorage.removeItem("opaiProgress");renderContinue()};
+  $("settingsBtn").onclick=()=>$("settings").showModal();
+  $("closeSettings").onclick=()=>$("settings").close();
+  $("closeDetails").onclick=()=>$("details").close();
+  $("saveSettings").onclick=()=>{document.body.classList.toggle("compact",$("densitySelect").value==="compact");localStorage.setItem("opaiDensity",$("densitySelect").value);$("settings").close()};
+  $("menuBtn").onclick=()=>$("sidebar").classList.toggle("open");
+  const density=localStorage.getItem("opaiDensity");
+  if(density==="compact")document.body.classList.add("compact");
+  ensureAdmin();
+  const session=localStorage.getItem("opaiSession")||sessionStorage.getItem("opaiSession");
+  const found=accounts().find(a=>String(a.u||"").trim().toLowerCase()===String(session||"").trim().toLowerCase());
+  if(found){user=found;showSite()}else{$("auth").hidden=false;$("site").hidden=true}
+}
+window.opaiLogin=login;
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initApp,{once:true});else initApp();

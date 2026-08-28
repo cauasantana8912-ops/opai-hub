@@ -12,15 +12,15 @@
 <div id="auth" class="auth">
   <div class="auth-card">
     <div class="brand">OPAI <b>HUB</b></div>
-    <div id="loginBox">
+    <form id="loginBox">
       <span class="eyebrow">SEU HUB. SEU MUNDO.</span>
       <h1>Entrar</h1><p>Acesse sua conta Opai Hub.</p>
       <input id="loginUser" autocomplete="username" placeholder="Usuário">
       <input id="loginPass" autocomplete="current-password" type="password" placeholder="Senha">
-      <button type="button" class="primary full" id="loginBtn" onclick="login();return false">Entrar</button>
+      <button type="submit" class="primary full" id="loginBtn">Entrar</button>
       <button class="link" id="showSignup">Criar conta</button>
       <p class="login-help">Conta de demonstração: <b>admin</b> / <b>cauhub123</b></p>
-    </div>
+    </form>
     <div id="signupBox" hidden>
       <span class="eyebrow">CRIAR PERFIL</span>
       <h1>Nova conta</h1><p>Crie um perfil local neste navegador.</p>
@@ -132,21 +132,23 @@
 </dialog>
 
 <script>
-window.login=function(){
-  const u=(document.getElementById('loginUser')?.value||'').trim().toLowerCase();
-  const p=document.getElementById('loginPass')?.value||'';
-  const msg=document.getElementById('authMsg');
-  if(u==='admin' && p==='cauhub123'){
-    try{localStorage.setItem('opaiSession','admin');localStorage.setItem('opaiAccounts',JSON.stringify([{u:'admin',p:'cauhub123',admin:true}]))}catch(e){}
-    document.getElementById('auth').hidden=true;
-    document.getElementById('site').hidden=false;
-    if(window.showSite) window.showSite();
+window.opaiLoginFallback=function(){
+  const u=(document.getElementById("loginUser")?.value||"").trim().toLowerCase();
+  const p=document.getElementById("loginPass")?.value||"";
+  const msg=document.getElementById("authMsg");
+  if(u==="admin" && p==="cauhub123"){
+    try{localStorage.setItem("opaiSession","admin");localStorage.setItem("opaiAccounts",JSON.stringify([{u:"admin",p:"cauhub123",admin:true}]))}catch(e){}
+    const auth=document.getElementById("auth"),site=document.getElementById("site");
+    if(auth)auth.hidden=true; if(site)site.hidden=false;
+    const nav=document.getElementById("adminNav"); if(nav)nav.hidden=false;
+    const au=document.getElementById("adminUser"); if(au)au.textContent="admin";
     return false;
   }
-  if(msg) msg.textContent='Usuário ou senha incorretos. Use admin / cauhub123.';
+  if(msg)msg.textContent="Usuário ou senha incorretos. Use admin / cauhub123.";
   return false;
 };
+document.getElementById("loginBox")?.addEventListener("submit",e=>{e.preventDefault();window.opaiLoginFallback();});
 </script>
-<script src="app.js?v=20260828-login-final"></script>
+<script src="app.js?v=20260828-login-fix-final" defer></script>
 </body>
 </html>
