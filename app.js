@@ -27,11 +27,21 @@ function signup(){
   $("loginUser").value=u;$("loginPass").value=p;toggleAuth(false);msg("Conta criada. Agora clique em Entrar.")
 }
 function login(){
-  const u=$("loginUser").value.trim(),p=$("loginPass").value;
+  const u=$("loginUser")?.value.trim()||"", p=$("loginPass")?.value||"";
   if(!u||!p)return msg("Digite usuário e senha.");
-  const x=ensureAdmin().find(a=>String(a.u||"").toLowerCase()===u.toLowerCase()&&String(a.p||"")===p);
-  if(!x)return msg("Usuário ou senha incorretos. Para testar: admin / cauhub123");
-  user=x;localStorage.setItem("opaiSession",x.u);showSite()
+  const list=ensureAdmin();
+  let x=list.find(a=>String(a.u||"").trim().toLowerCase()===u.toLowerCase()&&String(a.p??"")===p);
+  // Conta administrativa de demonstração: funciona mesmo se o localStorage antigo estiver inconsistente.
+  if(!x && u.toLowerCase()==="admin" && p==="cauhub123"){
+    x={u:"admin",p:"cauhub123",admin:true};
+    const i=list.findIndex(a=>String(a.u||"").trim().toLowerCase()==="admin");
+    if(i>=0) list[i]=x; else list.unshift(x);
+    localStorage.setItem("opaiAccounts",JSON.stringify(list));
+  }
+  if(!x)return msg("Usuário ou senha incorretos.");
+  user=x;
+  try{localStorage.setItem("opaiSession",x.u)}catch(e){sessionStorage.setItem("opaiSession",x.u)}
+  showSite();
 }
 function logout(){localStorage.removeItem("opaiSession");location.reload()}
 function showSite(){
@@ -177,5 +187,5 @@ $("saveSettings").onclick=()=>{document.body.classList.toggle("compact",$("densi
 $("menuBtn").onclick=()=>{$("sidebar").classList.toggle("open")};
 const density=localStorage.getItem("opaiDensity");if(density==="compact")document.body.classList.add("compact");
 ensureAdmin();
-const session=localStorage.getItem("opaiSession"),found=accounts().find(a=>a.u===session);
+const session=localStorage.getItem("opaiSession")||sessionStorage.getItem("opaiSession"),found=accounts().find(a=>String(a.u||"").toLowerCase()===String(session||"").toLowerCase());
 if(found){user=found;showSite()}else{$("auth").hidden=false;$("site").hidden=true}
