@@ -1,22 +1,10 @@
 # Opai Hub
 
-Projeto estático do Opai Hub, focado em **Animes e Séries**, com experiências diferentes para PC e celular.
+Catálogo de animes e séries com layouts distintos para PC e mobile.
 
-## Recursos
-- Login e cadastro local para demonstração
-- Sessão persistente e logout
-- Painel Admin de demonstração
-- Busca e filtros por Animes/Séries
-- Área Offline para organizar títulos salvos
-- Player reservado para fontes oficiais com incorporação autorizada
-- Layout desktop próprio e layout mobile próprio
-- Tema claro/escuro
-- PWA básico com service worker
+## Fontes
+- Animes: Jikan API (dados do MyAnimeList).
+- Séries: TVmaze API.
+- Assistir: links de descoberta para serviços oficiais (Crunchyroll para anime e JustWatch para séries).
 
-## Publicação no GitHub Pages
-Envie o conteúdo desta pasta para a raiz do repositório e publique pela branch `main` em `/(root)`.
-
-> A autenticação deste projeto é apenas uma demonstração no navegador. Para produção, use backend seguro e nunca armazene senhas reais em `localStorage`.
-
-
-Versão corrigida: PC/mobile com estilos incorporados e cache atualizado (v4).
+O projeto não hospeda nem redistribui episódios protegidos. A área Offline é apenas uma interface para conteúdo/downloads oficialmente disponibilizados pela respectiva plataforma.
