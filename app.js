@@ -1,5 +1,21 @@
 const ANILIST="https://graphql.anilist.co";
 const TVMAZE="https://api.tvmaze.com";
+const FALLBACK_ANIME=[
+ {id:"fb-1",title:{romaji:"Solo Leveling",english:"Solo Leveling"},coverImage:{large:"https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=600&q=80"},description:"Um jovem caçador ganha a chance de evoluir de uma forma que ninguém esperava.",episodes:25,status:"FINISHED",season:{year:2024},genres:["Ação","Aventura","Fantasia"]},
+ {id:"fb-2",title:{romaji:"One Piece",english:"One Piece"},coverImage:{large:"https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80"},description:"A aventura de uma tripulação em busca do lendário tesouro One Piece.",episodes:1100,status:"RELEASING",season:{year:1999},genres:["Ação","Aventura"]},
+ {id:"fb-3",title:{romaji:"Demon Slayer",english:"Demon Slayer"},coverImage:{large:"https://images.unsplash.com/photo-1577083552431-6e5fd01988f5?auto=format&fit=crop&w=600&q=80"},description:"Um jovem luta para proteger sua família e encontrar uma cura para sua irmã.",episodes:63,status:"FINISHED",season:{year:2019},genres:["Ação","Fantasia"]},
+ {id:"fb-4",title:{romaji:"Jujutsu Kaisen",english:"Jujutsu Kaisen"},coverImage:{large:"https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=600&q=80"},description:"Feiticeiros enfrentam maldições sobrenaturais em batalhas intensas.",episodes:47,status:"FINISHED",season:{year:2020},genres:["Ação","Fantasia"]},
+ {id:"fb-5",title:{romaji:"Kaiju No. 8",english:"Kaiju No. 8"},coverImage:{large:"https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80"},description:"Um integrante das forças de defesa enfrenta uma ameaça monstruosa inesperada.",episodes:23,status:"RELEASING",season:{year:2024},genres:["Ação","Sci-Fi"]},
+ {id:"fb-6",title:{romaji:"Wind Breaker",english:"Wind Breaker"},coverImage:{large:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=80"},description:"Uma história de amizade, rivalidade e lutas entre estudantes.",episodes:25,status:"FINISHED",season:{year:2024},genres:["Ação","Drama"]}
+];
+const FALLBACK_SERIES=[
+ {id:"s-1",name:"Stranger Things",image:{medium:"https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80"},summary:"Um grupo de amigos encara acontecimentos misteriosos em sua cidade.",premiered:"2016-07-15",status:"Running",type:"Scripted",runtime:50,rating:{average:8.7}},
+ {id:"s-2",name:"The Last of Us",image:{medium:"https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=500&q=80"},summary:"Uma jornada por um mundo transformado por uma pandemia.",premiered:"2023-01-15",status:"Running",type:"Scripted",runtime:55,rating:{average:8.6}},
+ {id:"s-3",name:"The Boys",image:{medium:"https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=500&q=80"},summary:"Um grupo tenta impedir que super-heróis abusem de seu poder.",premiered:"2019-07-26",status:"Running",type:"Scripted",runtime:60,rating:{average:8.6}},
+ {id:"s-4",name:"Wednesday",image:{medium:"https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&w=500&q=80"},summary:"Uma estudante peculiar investiga mistérios em sua nova escola.",premiered:"2022-11-23",status:"Running",type:"Scripted",runtime:50,rating:{average:8.1}},
+ {id:"s-5",name:"The Witcher",image:{medium:"https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=500&q=80"},summary:"Um caçador de monstros atravessa um mundo de magia e conflitos.",premiered:"2019-12-20",status:"Running",type:"Scripted",runtime:60,rating:{average:8.0}},
+ {id:"s-6",name:"Sherlock",image:{medium:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=500&q=80"},summary:"Um detetive brilhante resolve casos complexos em Londres.",premiered:"2010-07-25",status:"Ended",type:"Scripted",runtime:90,rating:{average:9.1}}
+];
 let anime=[], series=[], current=null, user=null, selectedSeason=1;
 
 const $=id=>document.getElementById(id);
@@ -67,11 +83,17 @@ function renderContinue(){
   $("continueCards").innerHTML=arr.map(x=>`<article class="card" data-continue="${x.id}" data-type="${x.type}"><div class="card-media"><img src="${x.poster}"><span class="continue-badge">${x.percent}%</span></div><div class="card-body"><div class="card-title">${esc(x.title)}</div><div class="card-sub">EP ${x.episode} de ${x.total}</div><div class="progress"><i style="width:${x.percent}%"></i></div></div></article>`).join("");
   document.querySelectorAll("[data-continue]").forEach(el=>el.onclick=()=>{const x=[...anime,...series].find(a=>String(a.id)===String(el.dataset.continue));if(x)openDetail(x,el.dataset.type)});
 }
+async function withTimeout(url,options={},ms=9000){
+ const c=new AbortController(); const t=setTimeout(()=>c.abort(),ms);
+ try{return await fetch(url,{...options,signal:c.signal})}finally{clearTimeout(t)}
+}
 async function aniQuery(){
  const q=`query{Page(perPage:24){media(type:ANIME,sort:POPULARITY_DESC,isAdult:false){id title{romaji english}coverImage{large extraLarge}description genres episodes status season{season year}averageScore externalLinks{site url type}streamingEpisodes{title thumbnail url site}}}}`;
- const r=await fetch(ANILIST,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query:q})});const j=await r.json();return j?.data?.Page?.media||[];
+ try{const r=await withTimeout(ANILIST,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query:q})}); if(!r.ok)throw new Error("AniList HTTP "+r.status); const j=await r.json(); const data=j?.data?.Page?.media||[]; if(!data.length)throw new Error("AniList sem resultados"); return data}catch(e){console.warn("AniList indisponível, usando catálogo de contingência",e); return FALLBACK_ANIME}
 }
-async function loadSeries(){const r=await fetch(`${TVMAZE}/shows?page=0`);return (await r.json()).slice(0,24)}
+async function loadSeries(){
+ try{const r=await withTimeout(`${TVMAZE}/shows?page=0`); if(!r.ok)throw new Error("TVMaze HTTP "+r.status); const data=(await r.json()).slice(0,24); if(!data.length)throw new Error("TVMaze sem resultados"); return data}catch(e){console.warn("TVMaze indisponível, usando catálogo de contingência",e); return FALLBACK_SERIES}
+}
 function meta(x,type){if(type==="anime")return `${x.season?.year||"—"}  •  ${x.episodes||"?"} episódios  •  ${x.status==="RELEASING"?"Em exibição":"Catálogo"}  •  HD`;return `${x.premiered?.slice(0,4)||"—"}  •  ${x.type||"Série"}  •  ${x.status||""}`}
 function card(x,type){
  const p=getProgress()[progressKey(x,type)],sub=type==="anime"?`Anime${x.episodes?` • ${x.episodes} eps`:""}`:`Série${x.rating?.average?` • ★ ${x.rating.average}`:""}`;
@@ -84,7 +106,7 @@ function render(id,arr,type){$(id).innerHTML=arr.map(x=>card(x,type)).join("");b
 async function loadCatalog(){
  try{
   anime=await aniQuery();series=await loadSeries();
-  render("popular",anime.slice(0,6),"anime");render("new",anime.slice(6,12),"anime");render("seriesHome",series.slice(0,6),"series");
+  render("popular",anime.slice(0,6),"anime");render("newCards",anime.slice(6,12),"anime");render("seriesHome",series.slice(0,6),"series");
   render("animeAll",anime,"anime");render("seriesAll",series,"series");render("trendingAll",anime,"anime");render("newAll",anime.slice(6),"anime");
   $("animeCount").textContent=`${anime.length} títulos`;$("seriesCount").textContent=`${series.length} títulos`;
   current=anime[0];setHero(current);
@@ -183,7 +205,7 @@ function doSearch(){
 }
 function initApp(){
   document.querySelectorAll(".nav,.mobile-bottom button").forEach(b=>b.onclick=()=>showSection(b.dataset.section));
-  document.querySelectorAll("[data-more]").forEach(b=>b.onclick=()=>showSection(b.dataset.more==="new"?"new":b.dataset.more==="series"?"series":"anime"));
+  document.querySelectorAll("[data-more]").forEach(b=>b.onclick=()=>showSection(b.dataset.more==="new"?"newEpisodes":b.dataset.more==="series"?"series":"anime"));
   $("search").addEventListener("keydown",e=>{if(e.key==="Enter")doSearch()});
   $("search").addEventListener("input",e=>{if(e.target.value.length>1)doSearch()});
   const form=$("loginBox");
