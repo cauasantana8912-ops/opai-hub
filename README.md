@@ -1,24 +1,11 @@
-# OPAI HUB — versão final
+# OPAI HUB — novo
 
-Inclui:
-- Login local com perfil administrador de demonstração.
-- Página inicial com **Continuar assistindo**.
-- Página de detalhes com **Assistir**.
-- Temporadas e episódios.
-- Progresso salvo no navegador.
-- Marcação de episódios concluídos.
-- Layout responsivo para celular.
-- Administração visível apenas para administrador.
-- Sem área/botão "Seja VIP".
-- Player incorporado apenas quando existir um `embedUrl` em domínio explicitamente autorizado.
-- Caso não exista embed autorizado, o botão abre a fonte oficial detectada.
+Frontend novo seguindo a referência enviada: dark + roxo, home, detalhes, temporadas/episódios, player embutido, progresso, marcação automática, mobile e painel administrativo.
 
-## Player / embeds
+Login de demonstração: `admin / cauhub123`.
 
-O código não injeta players de terceiros arbitrários. Para um título ter iframe incorporado, o catálogo precisa fornecer `embedUrl` e o domínio precisa estar na lista `AUTHORIZED_EMBED_HOSTS` em `app.js`.
+**Player:** aceita apenas URL `https://` fornecida pelo operador para embed autorizado. Não há links de fontes piratas no projeto.
 
-Para fontes oficiais que não permitem iframe, o sistema mantém o player visual e abre a página oficial em nova aba.
+**Produção:** o login desta versão é demonstrativo e usa `localStorage`; para produção, mova autenticação/autorização para um backend seguro.
 
-## Segurança
-
-O login mostrado é uma autenticação de demonstração no navegador. Para produção, credenciais, sessões e permissões administrativas devem ser validadas em backend seguro.
+Abra `index.html` ou sirva a pasta com um servidor HTTP.
