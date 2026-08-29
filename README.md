@@ -1,11 +1,25 @@
-# OPAI HUB — novo
+# OPAI HUB — ZERO V2
 
-Frontend novo seguindo a referência enviada: dark + roxo, home, detalhes, temporadas/episódios, player embutido, progresso, marcação automática, mobile e painel administrativo.
+Protótipo frontend criado do zero com base na referência visual enviada.
 
-Login de demonstração: `admin / cauhub123`.
+## Funcionalidades
+- Login demo: `admin / cauhub123`
+- Cadastro de contas locais em modo demo
+- Home com Hero, Continuar assistindo, Em Alta, Novos episódios, Séries e Top Airing no PC
+- Página de detalhes, temporadas e episódios
+- Progresso persistido no localStorage
+- Marcação automática como assistido
+- Área de reprodução/player demo
+- Busca funcionando
+- Catálogo de METADADOS públicos via Jikan quando disponível, com fallback offline
+- PC e mobile com interfaces responsivas distintas
+- Administração só aparece para `role=admin`
+- Configurações de qualidade, autoplay e desempenho
+- Sem “Seja VIP”
+- Player pensado para embeds HTTPS previamente autorizados
 
-**Player:** aceita apenas URL `https://` fornecida pelo operador para embed autorizado. Não há links de fontes piratas no projeto.
+## Executar
+Abra `index.html` ou use `python -m http.server 8080` na pasta.
 
-**Produção:** o login desta versão é demonstrativo e usa `localStorage`; para produção, mova autenticação/autorização para um backend seguro.
-
-Abra `index.html` ou sirva a pasta com um servidor HTTP.
+## Produção
+O login demo não é seguro para produção. Em produção, mover autenticação para backend, armazenar senhas com hash, validar embeds no servidor e manter allowlist de domínios autorizados. As APIs públicas são usadas somente para informações/metadados; o protótipo não hospeda mídia.
