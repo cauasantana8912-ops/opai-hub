@@ -1,25 +1,19 @@
-# OPAI HUB — ZERO V2
+# OPAI HUB ZERO V4
 
-Protótipo frontend criado do zero com base na referência visual enviada.
+## Login
+- Administrador: `admin / cauhub123`
+- Cadastro local de contas de demonstração disponível na tela de entrada.
 
-## Funcionalidades
-- Login demo: `admin / cauhub123`
-- Cadastro de contas locais em modo demo
-- Home com Hero, Continuar assistindo, Em Alta, Novos episódios, Séries e Top Airing no PC
-- Página de detalhes, temporadas e episódios
-- Progresso persistido no localStorage
-- Marcação automática como assistido
-- Área de reprodução/player demo
-- Busca funcionando
-- Catálogo de METADADOS públicos via Jikan quando disponível, com fallback offline
-- PC e mobile com interfaces responsivas distintas
-- Administração só aparece para `role=admin`
-- Configurações de qualidade, autoplay e desempenho
-- Sem “Seja VIP”
-- Player pensado para embeds HTTPS previamente autorizados
+## Novidades desta versão
+- Catálogo de anime atualizado automaticamente pela Jikan API usando a temporada atual e Top Airing.
+- Botão de atualização manual do catálogo.
+- Página de detalhes com abas funcionais: Episódios, Detalhes, Temporadas, Elenco e Avaliações.
+- Avaliações e elenco puxados sob demanda para títulos com `mal_id`.
+- Temporadas clicáveis.
+- Personalização de cor principal, secundária e fundo, com presets.
+- Configurações de qualidade, autoplay e redução de animações.
+- Progresso e marcação automática de episódios mantidos.
+- Player somente com URLs HTTPS configuradas como fontes autorizadas.
 
-## Executar
-Abra `index.html` ou use `python -m http.server 8080` na pasta.
-
-## Produção
-O login demo não é seguro para produção. Em produção, mover autenticação para backend, armazenar senhas com hash, validar embeds no servidor e manter allowlist de domínios autorizados. As APIs públicas são usadas somente para informações/metadados; o protótipo não hospeda mídia.
+## Observação
+A API fornece **informações públicas** de catálogo. Ela não fornece vídeos para reprodução. O player aceita somente fontes/embeds que o administrador tenha autorização para usar.
